@@ -9,6 +9,10 @@ app.use(bodyParser.json());
 var routes = require('./api/routes/eventRoutes');
 routes(app);
 
+app.use(function(req, res) {
+    res.status(404).send('Not found');
+});
+
 app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
