@@ -9,7 +9,7 @@ exports.list = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  var newEvent = new Event(req.body); //TODO: will work?
+  var newEvent = new Event(req.body);
   eventList.push(newEvent);
   res.sendStatus(201);
 };

@@ -6,8 +6,11 @@ var express = require('express'),
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./api/routes/eventRoutes');
-routes(app);
+var eventRoutes = require('./api/routes/eventRoutes');
+eventRoutes(app);
+
+var authRoutes = require('./api/routes/authenticationRouter');
+authRoutes(app);
 
 app.use(function(req, res) {
     res.status(404).send('Not found');
