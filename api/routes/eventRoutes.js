@@ -1,17 +1,19 @@
 'use strict';
 
+var jwtTokenVerifier = require('./jwtTokenVerifier');
+
 module.exports = function(app) {
 	
 	var event = require('../controllers/eventController');
 	
 	// event Routes
 	app.route('/event')
-		.get(event.list)
-		.post(event.create);
+		.get(jwtTokenVerifier, event.list)
+		.post(jwtTokenVerifier, event.create);
 	
 	
 	app.route('/event/:eventId')
-		.get(event.find)
-		.put(event.update)
-		.delete(event.delete);
+		.get(jwtTokenVerifier, event.find)
+		.put(jwtTokenVerifier, event.update)
+		.delete(jwtTokenVerifier, event.delete);
 };
