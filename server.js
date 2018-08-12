@@ -18,4 +18,4 @@ app.use(function(req, res) {
 
 app.listen(port);
 
-console.log('todo list RESTful API server started on: ' + port);
+console.log('Events RESTful API server started on: ' + port);
