@@ -1,3 +1,4 @@
+var bcrypt = require('bcryptjs');
 var User = require('../models/user');
 
 exports.create = function(req, res) {
@@ -7,7 +8,7 @@ exports.create = function(req, res) {
     };
     User.create(req.getConnection, user, function(value){
         if (value)
-            res.sendStatus(201);
+            res.status(201).send({});
         else
             res.sendStatus(400);
     });
