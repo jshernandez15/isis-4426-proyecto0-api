@@ -5,11 +5,11 @@ var Event = require('../models/event');
 let eventList = [];
 
 exports.list = function(req, res) {
-    Event.list(req.getConnection, function(response) {
-        if (response.list)
-            res.json(response.list);
+    Event.list(req.getConnection, function(store) {
+        if (store.list)
+            res.json(store.list);
         else
-            res.sendStatus(response);
+            res.sendStatus(store.code);
     });
 };
 
@@ -26,13 +26,12 @@ exports.create = function(req, res) {
 };
 
 exports.find = function(req, res) {
-    for (let index = 0; index < eventList.length; index++) {
-        const element = eventList[index];
-        if(element._id == req.params.eventId)
-            res.json(element);
-    }
-    if( !res.headersSent )
-        res.sendStatus(404);
+    Event.find(req.getConnection, req.params.eventId, function(store) {
+        if (store.event)
+            res.json(store.event);
+        else
+            res.sendStatus(store.code);
+    });
 };
 
 exports.update = function(req, res) {
