@@ -1,10 +1,4 @@
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-var config = require('../config');
-
 var User = require('../models/user');
-
-let userList = [];
 
 exports.create = function(req, res) {
     var user = {
@@ -16,20 +10,30 @@ exports.create = function(req, res) {
             res.sendStatus(201);
         else
             res.sendStatus(400);
-    })
+    });
 };
 
 exports.login = function(req, res) {
-    userList.forEach(user => {
-        if(user.name == req.body.name ) {
-            var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-            if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
-            var token = jwt.sign({ id: user.name }, config.key, {
-                expiresIn: 86400
-            });
-            res.status(200).send({ auth: true, token: token });
-        }  
+    var user = {
+        name: req.body.name,
+        password: req.body.password
+    };
+    User.login(req.getConnection, user, function(token) {
+        switch (token.status) {
+            case "ERR":
+                res.sendStatus(500);
+                break;
+            case "NOT_FOUND": 
+                res.sendStatus(404);
+                break;
+            case "WRONG": 
+                res.sendStatus(403);
+                break;
+            case "OK": 
+                res.status(200).send({ auth: true, token: token.value });
+                break;
+            default:
+                res.sendStatus(500);
+        }
     });
-    if( !res.headersSent )
-        res.sendStatus(404);
 }

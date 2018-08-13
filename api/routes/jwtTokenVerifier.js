@@ -7,7 +7,7 @@ function jwtTokenVerifier(req, res, next) {
     
     jwt.verify(token, config.key, function(err, decoded) {
         if (err) 
-            return res.status(500)
+            return res.status(403)
                     .send({ auth: false, message: 'Failed to authenticate token.' });
         
         req.username = decoded;
