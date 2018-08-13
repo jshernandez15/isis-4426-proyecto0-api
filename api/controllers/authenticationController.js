@@ -11,9 +11,12 @@ exports.create = function(req, res) {
         name: req.body.name,
         password: bcrypt.hashSync(req.body.password, 8)
     };
-    var newUser = new User(user);
-    userList.push(newUser);
-    res.sendStatus(201);
+    User.create(req.getConnection, user, function(value){
+        if (value)
+            res.sendStatus(201);
+        else
+            res.sendStatus(400);
+    })
 };
 
 exports.login = function(req, res) {
