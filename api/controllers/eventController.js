@@ -5,7 +5,12 @@ var Event = require('../models/event');
 let eventList = [];
 
 exports.list = function(req, res) {
-    res.json(eventList);
+    Event.list(req.getConnection, function(response) {
+        if (response.list)
+            res.json(response.list);
+        else
+            res.sendStatus(response);
+    });
 };
 
 exports.create = function(req, res) {
