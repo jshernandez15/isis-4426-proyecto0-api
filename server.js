@@ -1,10 +1,14 @@
 var express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    mysql = require('mysql'),
+    myConnection = require('express-myconnection'),
+    dbOptions = require('./api/database');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(myConnection(mysql, dbOptions, 'single'));
 
 var eventRoutes = require('./api/routes/eventRoutes');
 eventRoutes(app);
