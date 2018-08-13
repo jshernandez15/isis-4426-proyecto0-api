@@ -9,4 +9,7 @@ module.exports = function(app) {
     
     app.route('/login')
         .post(authentication.login);
+
+    app.route('/logout')
+        .get(authentication.logout);
 };

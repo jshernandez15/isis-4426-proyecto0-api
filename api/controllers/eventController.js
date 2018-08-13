@@ -2,8 +2,6 @@
 
 var Event = require('../models/event');
 
-let eventList = [];
-
 exports.list = function(req, res) {
     Event.list(req.getConnection, function(store) {
         if (store.list)
