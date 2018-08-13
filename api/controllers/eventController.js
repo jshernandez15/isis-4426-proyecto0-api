@@ -9,9 +9,15 @@ exports.list = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  var newEvent = new Event(req.body);
-  eventList.push(newEvent);
-  res.sendStatus(201);
+    Event.create(req.getConnection, req.body, function(insertedId) {
+        if (insertedId) {
+            res.sendStatus(201);
+        }
+        else {
+            res.sendStatus(400);
+        }
+    });
+  
 };
 
 exports.find = function(req, res) {

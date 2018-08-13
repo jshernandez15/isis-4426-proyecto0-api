@@ -1,8 +1,16 @@
 'use strict'
 
-function event(obj) {
-    this._id = obj._id;
-    this.name = obj.name;
+exports.create = function(db, event, callback) {
+    db(function(err, connection) {
+        if (err) throw "Error on db: " + err;
+        connection.query('INSERT INTO Events SET ?', event, function (error, results, fields) {
+            if (error){
+                console.log('Error performing insert event query: ' + error);
+                callback(false);
+            }
+            else{
+                callback(results.insertId);
+            }
+        });
+    });
 }
-
-module.exports = event;

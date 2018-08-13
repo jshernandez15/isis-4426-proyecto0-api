@@ -4,11 +4,6 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
 
-function user(obj) {
-    this.name = obj.name;
-    this.password = obj.password;
-}
-
 exports.create = function(db, user, callback){
     db(function(err, connection) {
         if (err) throw "Error on db: " + err;
