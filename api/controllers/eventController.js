@@ -46,8 +46,9 @@ exports.update = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-    eventList = eventList.filter( e => e._id != req.params.eventId );
-    res.sendStatus(200);
+    Event.delete(req.getConnection, req.params.eventId, function(store) {
+        res.sendStatus(store.code);
+    });
 };
 
 

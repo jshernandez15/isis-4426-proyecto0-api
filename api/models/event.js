@@ -47,3 +47,21 @@ exports.find = function(db, id, callback) {
         });
     });
 }
+
+exports.delete = function(db, id, callback) {
+    db(function(err, connection) {
+        if (err) throw "Error on db: " + err;
+        connection.query('delete from Events where id = ?', [id], function (error, results, fields) {
+            if (error){
+                console.log('Error performing delete events by id query: ' + error);
+                callback({code: 500});
+            }
+            else {
+                if (results.affectedRows == 0)
+                    callback({code: 404});
+                else
+                    callback({code: 200});
+            }
+        });
+    });
+}
