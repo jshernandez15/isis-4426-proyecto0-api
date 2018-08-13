@@ -35,14 +35,12 @@ exports.find = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    for (let index = 0; index < eventList.length; index++) {
-        if(eventList[index]._id === req.params.eventId) {
-            eventList[index] = new Event(req.body);
-            res.json(eventList[index]);
-        }
-    }
-    if( !res.headersSent )
-        res.sendStatus(404);
+    Event.update(req.getConnection, req.body, req.params.eventId, function(store) {
+        if (store.event)
+            res.json(store.event);
+        else
+            res.sendStatus(store.code);
+    });
 };
 
 exports.delete = function(req, res) {
