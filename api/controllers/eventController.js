@@ -14,10 +14,10 @@ exports.list = function(req, res) {
 exports.create = function(req, res) {
     Event.create(req.getConnection, req.body, function(insertedId) {
         if (insertedId) {
-            res.sendStatus(201);
+            res.status(201).send({id: insertedId, ...req.body});
         }
         else {
-            res.sendStatus(400);
+            res.status(400).send({message: "Error creating the event"});
         }
     });
   
@@ -34,8 +34,8 @@ exports.find = function(req, res) {
 
 exports.update = function(req, res) {
     Event.update(req.getConnection, req.body, req.params.eventId, function(store) {
-        if (store.event)
-            res.json(store.event);
+        if (store.code == 200)
+            res.status(200).send({id: req.params.eventId, ...req.body});
         else
             res.sendStatus(store.code);
     });
@@ -43,7 +43,7 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
     Event.delete(req.getConnection, req.params.eventId, function(store) {
-        res.sendStatus(store.code);
+        res.status(store.code).send({});
     });
 };
 
