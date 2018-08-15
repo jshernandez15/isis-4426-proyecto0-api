@@ -3,7 +3,7 @@
 var Event = require('../models/event');
 
 exports.list = function(req, res) {
-    Event.list(req.getConnection, function(store) {
+    Event.list(req.getConnection, req.username, function(store) {
         if (store.list)
             res.json(store.list);
         else
@@ -12,7 +12,7 @@ exports.list = function(req, res) {
 };
 
 exports.create = function(req, res) {
-    Event.create(req.getConnection, req.body, function(insertedId) {
+    Event.create(req.getConnection, req.body, req.username, function(insertedId) {
         if (insertedId) {
             res.status(201).send({id: insertedId, ...req.body});
         }

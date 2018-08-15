@@ -10,7 +10,7 @@ function jwtTokenVerifier(req, res, next) {
             return res.status(403)
                     .send({ auth: false, message: 'Failed to authenticate token.' });
         
-        req.username = decoded;
+        req.username = decoded.id;
         next();
     }); 
 }

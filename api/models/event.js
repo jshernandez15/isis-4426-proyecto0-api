@@ -1,9 +1,9 @@
 'use strict'
 
-exports.list = function(db, callback) {
+exports.list = function(db, user, callback) {
     db(function(err, connection) {
         if (err) throw "Error on db: " + err;
-        connection.query('SELECT * FROM Events', [], function (error, results, fields) {
+        connection.query('SELECT * FROM Events where user = ? order by created desc', [user], function (error, results, fields) {
             if (error){
                 console.log('Error performing select events query: ' + error);
                 callback({code: 500});
@@ -15,10 +15,12 @@ exports.list = function(db, callback) {
     });
 }
 
-exports.create = function(db, event, callback) {
+exports.create = function(db, event, user, callback) {
     db(function(err, connection) {
         if (err) throw "Error on db: " + err;
-        connection.query('INSERT INTO Events SET ?', event, function (error, results, fields) {
+        var d = new Date();
+        var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+        connection.query('INSERT INTO Events SET ?', {...event, user: user, created: dateCreated}, function (error, results, fields) {
             if (error){
                 console.log('Error performing insert event query: ' + error);
                 callback(false);
