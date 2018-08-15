@@ -14,7 +14,7 @@ exports.list = function(req, res) {
 exports.create = function(req, res) {
     Event.create(req.getConnection, req.body, req.username, function(insertedId) {
         if (insertedId) {
-            res.status(201).send({id: insertedId, ...req.body});
+            res.status(201).send({...req.body, id: insertedId});
         }
         else {
             res.status(400).send({message: "Error creating the event"});
