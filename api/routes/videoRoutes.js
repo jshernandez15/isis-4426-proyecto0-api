@@ -10,5 +10,5 @@ module.exports = function (app) {
 		.post(video.create);
 
 	app.route('/competition/:competitionId/videos')
-		.get(video.find)
+		.get(video.list)
 };

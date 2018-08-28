@@ -3,7 +3,7 @@
 var Videos = require('../models/videos');
 
 exports.list = function(req, res) {
-    Videos.list(req.getConnection, req.username, function(store) {
+    Videos.list(req.getConnection, req.params.competitionId, function(store) {
         if (store.list)
             res.json(store.list);
         else
