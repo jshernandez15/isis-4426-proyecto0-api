@@ -25,6 +25,9 @@ app.use(function(req, res, next) {
 
 app.use(myConnection(mysql, dbOptions, 'single'));
 
+var fileUploadRoutes = require('./api/routes/fileUploadRoutes');
+fileUploadRoutes(app);
+
 var eventRoutes = require('./api/routes/competitionRoutes');
 eventRoutes(app);
 
