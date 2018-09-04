@@ -34,6 +34,9 @@ eventRoutes(app);
 var authRoutes = require('./api/routes/authenticationRouter');
 authRoutes(app);
 
+var videoRoutes = require('./api/routes/videoRoutes');
+videoRoutes(app);
+
 app.use(function(req, res) {
     res.status(404).send('Not found');
 });
