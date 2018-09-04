@@ -25,7 +25,7 @@ app.use(function(req, res, next) {
 
 app.use(myConnection(mysql, dbOptions, 'single'));
 
-var eventRoutes = require('./api/routes/eventRoutes');
+var eventRoutes = require('./api/routes/competitionRoutes');
 eventRoutes(app);
 
 var authRoutes = require('./api/routes/authenticationRouter');

@@ -6,7 +6,7 @@ CREATE TABLE `Users` (
   UNIQUE KEY `Users_Name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `Events` (
+CREATE TABLE `Competitions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(500) NOT NULL,
   `category` varchar(25) NOT NULL,
