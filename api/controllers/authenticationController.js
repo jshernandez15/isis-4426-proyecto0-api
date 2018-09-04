@@ -4,7 +4,9 @@ var User = require('../models/user');
 exports.create = function(req, res) {
     var user = {
         name: req.body.name,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
     };
     User.create(req.getConnection, user, function(value){
         if (value)
