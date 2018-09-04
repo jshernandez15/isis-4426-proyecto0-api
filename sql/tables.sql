@@ -24,8 +24,8 @@ CREATE TABLE `Competitions` (
 
 CREATE TABLE `videos` (
   `id_video` int(11) NOT NULL,
-  `names` varchar(50) NOT NULL,
-  `last_names` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
   `email` varchar(200) NOT NULL,
   `path_real` varchar(2000) NOT NULL,
   `description` varchar(50) NOT NULL,
