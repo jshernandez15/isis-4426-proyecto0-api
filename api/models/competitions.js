@@ -53,6 +53,7 @@ exports.find = function(db, id, callback) {
 exports.update = function(db, competition, id, callback) {
     db(function(err, connection) {
         if (err) throw "Error on db: " + err;
+        delete competition.created;
         connection.query("update Competitions set ? where id = ?",
                         [competition, id], function (error, results, fields) {
             if (error){
