@@ -21,3 +21,16 @@ CREATE TABLE `Competitions` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `videos` (
+  `id_video` int(11) NOT NULL,
+  `names` varchar(50) NOT NULL,
+  `last_names` varchar(50) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `path_real` varchar(2000) NOT NULL,
+  `description` varchar(50) NOT NULL,
+  `fk_id_competition` int(11) NOT NULL,
+  `path_convertido` varchar(2000) NOT NULL,
+  `state_video` varchar(50) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
