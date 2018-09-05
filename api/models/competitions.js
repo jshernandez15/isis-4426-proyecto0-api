@@ -44,6 +44,24 @@ exports.find = function(db, id, callback) {
                 if (results.length == 0)
                     callback({code: 404});
                 else
+                    callback({list: results[0]});
+            }
+        });
+    });
+}
+
+exports.findByURL = function(db, address, callback) {
+    db(function(err, connection) {
+        if (err) throw "Error on db: " + err;
+        connection.query('SELECT * FROM Competitions where address = ?', [address], function (error, results, fields) {
+            if (error){
+                console.log('Error performing select Competitions by address query: ' + error);
+                callback({code: 500});
+            }
+            else {
+                if (results.length == 0)
+                    callback({code: 404});
+                else
                     callback({competition: results[0]});
             }
         });

@@ -32,6 +32,15 @@ exports.find = function(req, res) {
     });
 };
 
+exports.findByURL = function(req, res) {
+    Competitions.findByURL(req.getConnection, req.params.url, function(store) {
+        if (store.competition)
+            res.json(store.competition);
+        else
+            res.sendStatus(store.code);
+    });
+};
+
 exports.update = function(req, res) {
     Competitions.update(req.getConnection, req.body, req.params.competitionId, function(store) {
         if (store.code == 200)
