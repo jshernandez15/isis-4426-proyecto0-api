@@ -1,17 +1,14 @@
 'use strict';
 
-var jwtTokenVerifier = require('./jwtTokenVerifier');
 
 module.exports = function (app) {
 
 	var video = require('../controllers/videoController');
 
-	// competition Routes
+	// videos Routes
 	app.route('/video')
-		.post(jwtTokenVerifier, video.create);
+		.post(video.create);
 
 	app.route('/video/:competitionId')
 		.get(video.find)
-		.put(jwtTokenVerifier, video.update)
-		.delete(jwtTokenVerifier, video.delete);
 };
