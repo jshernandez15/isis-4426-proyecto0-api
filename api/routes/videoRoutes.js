@@ -10,10 +10,8 @@ module.exports = function (app) {
 	app.route('/video')
 		.post(jwtTokenVerifier, video.create);
 
-	/*
-	app.route('/competition/:competitionId')
-		.get(jwtTokenVerifier, competition.find)
-		.put(jwtTokenVerifier, competition.update)
-		.delete(jwtTokenVerifier, competition.delete);
-		*/
+	app.route('/video/:competitionId')
+		.get(video.find)
+		.put(jwtTokenVerifier, video.update)
+		.delete(jwtTokenVerifier, video.delete);
 };
