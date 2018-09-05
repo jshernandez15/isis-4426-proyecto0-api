@@ -9,6 +9,6 @@ module.exports = function (app) {
 	app.route('/video')
 		.post(video.create);
 
-	app.route('/video/:competitionId')
+	app.route('/competition/:competitionId/videos')
 		.get(video.find)
 };
