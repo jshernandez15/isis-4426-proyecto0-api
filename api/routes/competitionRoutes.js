@@ -16,4 +16,7 @@ module.exports = function(app) {
 		.get(jwtTokenVerifier, competition.find)
 		.put(jwtTokenVerifier, competition.update)
 		.delete(jwtTokenVerifier, competition.delete);
+
+	app.route('/competition/url/:url')
+		.get(jwtTokenVerifier, competition.findByURL);
 };
