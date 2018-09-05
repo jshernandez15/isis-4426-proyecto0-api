@@ -24,12 +24,12 @@ exports.create = function(db, video, callback) {
         var newVideo = {};
         newVideo.name = video.name;
         newVideo.last_name = video.lastName;
-        newVideo.email = video.name;
+        newVideo.email = video.email;
         newVideo.path_real = video.path;
         newVideo.description = video.description;
-        newVideo.fk_id_competition = video.name;
+        newVideo.fk_id_competition = video.idConcurso;
         newVideo.path_convertido = "";
-        newVideo.state_video = "PENDIENTE";
+        newVideo.state_video = video.stateVideo;
         console.log(JSON.stringify(newVideo));
 
         connection.query('INSERT INTO videos SET ?', {...newVideo, created: dateCreated}, function (error, results, fields) {
