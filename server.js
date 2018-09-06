@@ -1,16 +1,16 @@
 var express = require('express'),
-    app = express(),
-    port = process.env.PORT || 3000,
-    bodyParser = require('body-parser'),
-    mysql = require('mysql'),
-    myConnection = require('express-myconnection'),
-    dbOptions = require('./api/database');
+  app = express(),
+  port = process.env.PORT || 3000,
+  bodyParser = require('body-parser'),
+  mysql = require('mysql'),
+  myConnection = require('express-myconnection'),
+  dbOptions = require('./api/database');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.disable('etag');
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-access-token');
@@ -37,8 +37,8 @@ authRoutes(app);
 var videoRoutes = require('./api/routes/videoRoutes');
 videoRoutes(app);
 
-app.use(function(req, res) {
-    res.status(404).send('Not found');
+app.use(function (req, res) {
+  res.status(404).send('Not found');
 });
 
 app.listen(port);

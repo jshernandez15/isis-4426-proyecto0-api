@@ -44,7 +44,7 @@ exports.find = function(db, id, callback) {
                 if (results.length == 0)
                     callback({code: 404});
                 else
-                    callback({list: results[0]});
+                    callback({competition: results[0]});
             }
         });
     });

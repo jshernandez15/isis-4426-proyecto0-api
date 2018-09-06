@@ -1,14 +1,13 @@
-'use strict';
+"use strict";
 
+module.exports = function(app) {
+  var video = require("../controllers/videoController");
 
-module.exports = function (app) {
+  // videos Routes
+  app.route("/video").post(video.create);
 
-	var video = require('../controllers/videoController');
+  app.route("/competition/:competitionId/videos/:state").get(video.list);
 
-	// videos Routes
-	app.route('/video')
-		.post(video.create);
+  app.route("/competition/:competitionId/videos").get(video.listById);
 
-	app.route('/competition/:competitionId/videos')
-		.get(video.list)
 };
