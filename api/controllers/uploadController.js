@@ -4,6 +4,8 @@ module.exports = function upload(req, res) {
     var form = new IncomingForm();
     var response = {};
 
+    form.keepExtensions = true;
+
     form.on('file', (field, file) => {
         response = file;
         // Do something with the file
