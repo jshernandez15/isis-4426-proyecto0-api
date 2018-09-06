@@ -4,7 +4,7 @@ exports.list = function(db, param, callback) {
   db(function(err, connection) {
     if (err) throw "Error on db: " + err;
     connection.query(
-      "SELECT * FROM videos where fk_id_competition = ? and state_video = ?",
+      "SELECT * FROM videos where fk_id_competition = ? and state_video = ? order by id_video desc",
       [param.competitionId, param.state],
       function(error, results, fields) {
         if (error) {
@@ -22,7 +22,7 @@ exports.listById = function(db, param, callback) {
   db(function(err, connection) {
     if (err) throw "Error on db: " + err;
     connection.query(
-      "SELECT * FROM videos where fk_id_competition = ?",
+      "SELECT * FROM videos where fk_id_competition = ? order by id_video desc",
       [param.competitionId],
       function(error, results, fields) {
         if (error) {
@@ -82,7 +82,7 @@ exports.find = function(db, id, callback) {
   db(function(err, connection) {
     if (err) throw "Error on db: " + err;
     connection.query(
-      "SELECT * FROM videos where fk_id_competition = ?",
+      "SELECT * FROM videos where fk_id_competition = ? order by id_video desc",
       [id],
       function(error, results, fields) {
         if (error) {
