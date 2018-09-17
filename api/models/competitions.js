@@ -18,15 +18,31 @@ exports.list = function (db, user, callback) {
 exports.create = function (db, competition, user, callback) {
     db(function (err, connection) {
         if (err) throw "Error on db: " + err;
-        var d = new Date();
-        var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
-        connection.query('INSERT INTO Competitions SET ?', { ...competition, user: user, created: dateCreated }, function (error, results, fields) {
+        connection.query('SELECT * FROM Competitions where address = ?', [competition.address], function (error, results, fields) {
             if (error) {
-                console.log('Error performing insert Competitions query: ' + error);
-                callback(false);
+                console.log('Error performing select Competitions by address query: ' + error);
+                callback({ code: 500 });
             }
             else {
-                callback(results.insertId);
+                if (results.length == 0) {
+                    db(function (err, connection) {
+                        if (err) throw "Error on db: " + err;
+                        var d = new Date();
+                        var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+                        connection.query('INSERT INTO Competitions SET ?', { ...competition, user: user, created: dateCreated }, function (error, results, fields) {
+                            if (error) {
+                                console.log('Error performing insert Competitions query: ' + error);
+                                callback(false);
+                            }
+                            else {
+                                callback({ code: 400 });
+                            }
+                        });
+                    });
+                }
+                else {
+                    callback({ code: 400, message: 'Error existing address' });
+                }
             }
         });
     });
