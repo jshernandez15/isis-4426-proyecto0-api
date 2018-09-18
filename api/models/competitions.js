@@ -35,7 +35,7 @@ exports.create = function (db, competition, user, callback) {
                                 callback(false);
                             }
                             else {
-                                callback({ code: 400 });
+                                callback(results.insertId);
                             }
                         });
                     });
