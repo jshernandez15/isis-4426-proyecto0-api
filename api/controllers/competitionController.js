@@ -58,9 +58,7 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-    Competitions.delete(req.getConnection, req.params.competitionId, function (
-        store
-    ) {
+    Competitions.delete(req.getConnection, req.params.competitionId, function (store) {
         res.status(store.code).send({});
     });
 };

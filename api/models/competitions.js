@@ -105,7 +105,6 @@ exports.update = function (db, competition, id, callback) {
 }
 
 exports.delete = function (db, id, callback) {
-
     db(function (err, connection) {
         if (err) throw "Error on db: " + err;
         connection.query('delete from videos where fk_id_competition = ?', [id], function (error, results, fields) {
@@ -114,25 +113,21 @@ exports.delete = function (db, id, callback) {
                 callback({ code: 500 });
             }
             else {
-                if (results.affectedRows == 0)
-                    callback({ code: 404 });
-                else {
-                    db(function (err, connection) {
-                        if (err) throw "Error on db: " + err;
-                        connection.query('delete from Competitions where id = ?', [id], function (error, results, fields) {
-                            if (error) {
-                                console.log('Error performing delete Competitions by id query: ' + error);
-                                callback({ code: 500 });
-                            }
-                            else {
-                                if (results.affectedRows == 0)
-                                    callback({ code: 404 });
-                                else
-                                    callback({ code: 200 });
-                            }
-                        });
+                db(function (err, connection) {
+                    if (err) throw "Error on db: " + err;
+                    connection.query('delete from Competitions where id = ?', [id], function (error, results, fields) {
+                        if (error) {
+                            console.log('Error performing delete Competitions by id query: ' + error);
+                            callback({ code: 500 });
+                        }
+                        else {
+                            if (results.affectedRows == 0)
+                                callback({ code: 404 });
+                            else
+                                callback({ code: 200 });
+                        }
                     });
-                }
+                });
             }
         });
     });
