@@ -37,6 +37,15 @@ exports.find = function (req, res) {
     });
 };
 
+exports.findWithoutToken = function (req, res) {
+    Competitions.find(req.getConnection, req.params.competitionId, function (
+        store
+    ) {
+        if (store.competition) res.json(store.competition);
+        else res.sendStatus(store.code);
+    });
+};
+
 exports.findByURL = function (req, res) {
     Competitions.findByURL(req.getConnection, req.params.url, function (store) {
         if (store.competition) res.json(store.competition);

@@ -11,14 +11,14 @@ module.exports = function (app) {
 		.get(jwtTokenVerifier, competition.list)
 		.post(jwtTokenVerifier, competition.create);
 
-	// competition Routes
-	app.route('/competitionWithoutToken')
-		.get(competition.list)
 
 	app.route('/competition/:competitionId')
 		.get(jwtTokenVerifier, competition.find)
 		.put(jwtTokenVerifier, competition.update)
 		.delete(jwtTokenVerifier, competition.delete);
+
+	app.route('/competitionWithoutToken/:competitionId')
+		.get(competition.findWithoutToken)
 
 	app.route('/competition/url/:url')
 		.get(jwtTokenVerifier, competition.findByURL);
