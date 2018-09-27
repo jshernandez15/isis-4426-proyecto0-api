@@ -20,6 +20,9 @@ module.exports = function (app) {
 		.put(jwtTokenVerifier, competition.update)
 		.delete(jwtTokenVerifier, competition.delete);
 
+	app.route('/competitionWithoutToken/:competitionId')
+		.get(competition.findWithoutToken)
+
 	app.route('/competition/url/:url')
 		.get(jwtTokenVerifier, competition.findByURL);
 };
