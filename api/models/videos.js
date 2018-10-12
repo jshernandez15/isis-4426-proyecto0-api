@@ -2,7 +2,6 @@
 
 var AWS = require("aws-sdk");
 
-
 exports.list = function (db, param, callback) {
   db(function (err, connection) {
     if (err) throw "Error on db: " + err;
@@ -40,11 +39,16 @@ exports.listById = function (db, param, callback) {
 };
 
 exports.create = function (db, video, callback) {
-  AWS.config.update({ accessKeyId: process.env.KEYID, secretAccessKey: process.env.SECRETKEYID });
-  AWS.config.region = 'us-west-2';  //us-west-2 is Oregon
+  AWS.config.update({
+    accessKeyId: process.env.KEYID,
+    secretAccessKey: process.env.SECRETKEYID
+  });
+  AWS.config.region = "us-west-2"; //us-west-2 is Oregon
+  //AWS.config.endpoint = 'arn:aws:dynamodb:us-west-2:994147617895'
 
+  console.log(process.env.KEYID);
+  console.log(process.env.SECRETKEYID);
   var ddb = new AWS.DynamoDB();
-
 
   db(function (err, connection) {
     if (err) throw "Error on db: " + err;
@@ -72,13 +76,27 @@ exports.create = function (db, video, callback) {
     newVideo.path_convertido = "";
     newVideo.state_video = video.stateVideo;
 
+    /*
     var params = {
       TableName: 'videos',
       Item: {
-        'id': newVideo,
+        id: {
+          S: 'abc123'
+        }
+      }
+    };
+*/
+
+    var params = {
+      TableName: 'videos',
+      Item: {
+        "id": { S: 'year' }
       }
     };
 
+    console.log("++++++++++++++++++++++");
+    console.log(params);
+    console.log("++++++++++++++++++++++");
     ddb.putItem(params, function (err, data) {
       if (err) {
         console.log("Error", err);
@@ -86,7 +104,6 @@ exports.create = function (db, video, callback) {
         console.log("Success", data);
       }
     });
-
 
     connection.query(
       "INSERT INTO videos SET ?",
