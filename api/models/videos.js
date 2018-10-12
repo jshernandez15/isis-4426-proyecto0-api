@@ -1,12 +1,15 @@
 "use strict";
 
-exports.list = function(db, param, callback) {
-  db(function(err, connection) {
+var AWS = require("aws-sdk");
+
+
+exports.list = function (db, param, callback) {
+  db(function (err, connection) {
     if (err) throw "Error on db: " + err;
     connection.query(
       "SELECT * FROM videos where fk_id_competition = ? and state_video = ? order by id_video desc",
       [param.competitionId, param.state],
-      function(error, results, fields) {
+      function (error, results, fields) {
         if (error) {
           console.log("Error performing select Competitions query: " + error);
           callback({ code: 500 });
@@ -18,13 +21,13 @@ exports.list = function(db, param, callback) {
   });
 };
 
-exports.listById = function(db, param, callback) {
-  db(function(err, connection) {
+exports.listById = function (db, param, callback) {
+  db(function (err, connection) {
     if (err) throw "Error on db: " + err;
     connection.query(
       "SELECT * FROM videos where fk_id_competition = ? order by id_video desc",
       [param.competitionId],
-      function(error, results, fields) {
+      function (error, results, fields) {
         if (error) {
           console.log("Error performing select Competitions query: " + error);
           callback({ code: 500 });
@@ -36,8 +39,14 @@ exports.listById = function(db, param, callback) {
   });
 };
 
-exports.create = function(db, video, callback) {
-  db(function(err, connection) {
+exports.create = function (db, video, callback) {
+  AWS.config.update({ accessKeyId: process.env.KEYID, secretAccessKey: process.env.SECRETKEYID });
+  AWS.config.region = 'us-west-2';  //us-west-2 is Oregon
+
+  var ddb = new AWS.DynamoDB();
+
+
+  db(function (err, connection) {
     if (err) throw "Error on db: " + err;
     var d = new Date();
     var dateCreated =
@@ -63,10 +72,26 @@ exports.create = function(db, video, callback) {
     newVideo.path_convertido = "";
     newVideo.state_video = video.stateVideo;
 
+    var params = {
+      TableName: 'videos',
+      Item: {
+        'id': newVideo,
+      }
+    };
+
+    ddb.putItem(params, function (err, data) {
+      if (err) {
+        console.log("Error", err);
+      } else {
+        console.log("Success", data);
+      }
+    });
+
+
     connection.query(
       "INSERT INTO videos SET ?",
       { ...newVideo, created: dateCreated },
-      function(error, results, fields) {
+      function (error, results, fields) {
         if (error) {
           console.log("Error performing insert videos query: " + error);
           callback(false);
@@ -78,13 +103,13 @@ exports.create = function(db, video, callback) {
   });
 };
 
-exports.find = function(db, id, callback) {
-  db(function(err, connection) {
+exports.find = function (db, id, callback) {
+  db(function (err, connection) {
     if (err) throw "Error on db: " + err;
     connection.query(
       "SELECT * FROM videos where fk_id_competition = ? order by id_video desc",
       [id],
-      function(error, results, fields) {
+      function (error, results, fields) {
         if (error) {
           console.log(
             "Error performing select Competitions by id query: " + error
@@ -99,14 +124,14 @@ exports.find = function(db, id, callback) {
   });
 };
 
-exports.update = function(db, competition, id, callback) {
-  db(function(err, connection) {
+exports.update = function (db, competition, id, callback) {
+  db(function (err, connection) {
     if (err) throw "Error on db: " + err;
     delete competition.created;
     connection.query(
       "update Competitions set ? where id = ?",
       [competition, id],
-      function(error, results, fields) {
+      function (error, results, fields) {
         if (error) {
           console.log(
             "Error performing update Competitions by id query: " + error
@@ -121,10 +146,10 @@ exports.update = function(db, competition, id, callback) {
   });
 };
 
-exports.delete = function(db, id, callback) {
-  db(function(err, connection) {
+exports.delete = function (db, id, callback) {
+  db(function (err, connection) {
     if (err) throw "Error on db: " + err;
-    connection.query("delete from Competitions where id = ?", [id], function(
+    connection.query("delete from Competitions where id = ?", [id], function (
       error,
       results,
       fields

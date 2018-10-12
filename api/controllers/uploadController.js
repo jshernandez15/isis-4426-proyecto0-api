@@ -5,7 +5,7 @@ module.exports = function upload(req, res) {
     var response = {};
 
     form.keepExtensions = true;
-    form.uploadDir = "/mnt/fileServer";
+    //form.uploadDir = "/mnt/fileServer";
 
     form.on('file', (field, file) => {
         response = file;
