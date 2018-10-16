@@ -46,7 +46,6 @@ exports.create = function (db, video, callback) {
     secretAccessKey: process.env.SECRETKEYID
   });
   AWS.config.region = "us-west-2"; //us-west-2 is Oregon
-  //AWS.config.endpoint = 'arn:aws:dynamodb:us-west-2:994147617895'
 
   console.log(process.env.KEYID);
   console.log(process.env.SECRETKEYID);
