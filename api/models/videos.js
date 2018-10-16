@@ -1,6 +1,8 @@
 "use strict";
 
 var AWS = require("aws-sdk");
+var uuid = require('uuid');
+
 
 exports.list = function (db, param, callback) {
   db(function (err, connection) {
@@ -67,30 +69,29 @@ exports.create = function (db, video, callback) {
       "-" +
       d.getSeconds();
     var newVideo = {};
+    newVideo.id = uuid.v1();
     newVideo.name = video.name;
     newVideo.last_name = video.lastName;
-    newVideo.email = video.email;
+    newVideo.email = video.email
     newVideo.path_real = video.path;
     newVideo.description = video.description;
-    newVideo.fk_id_competition = video.idConcurso;
+    newVideo.fk_id_competition = Number(video.idConcurso);
     newVideo.path_convertido = "";
     newVideo.state_video = video.stateVideo;
 
-    /*
-    var params = {
-      TableName: 'videos',
-      Item: {
-        id: {
-          S: 'abc123'
-        }
-      }
-    };
-*/
 
     var params = {
       TableName: 'videos',
       Item: {
-        "id": { S: 'year' }
+        "id": { "S": video.name },
+        "name": { "S": video.name },
+        "last_name": { "S": video.lastName },
+        "email": { "S": video.email },
+        "path_real": { "S": video.path },
+        "description": { "S": video.description },
+        "fk_id_competition": { N: video.idConcurso.toString() },
+        "path_convertido": { "S": "empty" },
+        "state_video": { "S": video.stateVideo }
       }
     };
 
