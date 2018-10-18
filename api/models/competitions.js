@@ -3,9 +3,8 @@
 var AWS = require("aws-sdk");
 var uuid = require('uuid');
 
-exports.list = function (db, user, callback) {
+exports.list = function (user, callback) {
     //order by created desc'
-    console.log(user);
     AWS.config.update({
         accessKeyId: process.env.KEYID,
         secretAccessKey: process.env.SECRETKEYID
@@ -34,7 +33,7 @@ exports.list = function (db, user, callback) {
 
 
 
-exports.create = function (db, competition, user, callback) {
+exports.create = function (competition, user, callback) {
     //validar tema URL
     AWS.config.update({
         accessKeyId: process.env.KEYID,
@@ -70,44 +69,36 @@ exports.create = function (db, competition, user, callback) {
 
 }
 
-exports.find = function (db, id, callback) {
+exports.find = function (id, callback) {
 
-    db(function (err, connection) {
-        if (err) throw "Error on db: " + err;
-        connection.query('SELECT * FROM Competitions where id = ?', [id], function (error, results, fields) {
-            if (error) {
-                console.log('Error performing select Competitions by id query: ' + error);
-                callback({ code: 500 });
-            }
-            else {
-                if (results.length == 0)
-                    callback({ code: 404 });
-                else
-                    callback({ competition: results[0] });
-            }
-        });
+    AWS.config.update({
+        accessKeyId: process.env.KEYID,
+        secretAccessKey: process.env.SECRETKEYID
+    });
+    AWS.config.region = "us-west-2"; //us-west-2 is Oregon
+
+    var docClient = new AWS.DynamoDB.DocumentClient();
+    var params = {
+        TableName: "competitions",
+        KeyConditionExpression: "#id = :id",
+        ExpressionAttributeNames: {
+            "#id": "id"
+        },
+        ExpressionAttributeValues: {
+            ":id": id
+        }
+    };
+
+    docClient.query(params, function (err, data) {
+        if (err) {
+            callback({ code: 500 });
+        } else {
+            callback({ competition: data.Items[0] });
+        }
     });
 }
 
-exports.findByURL = function (db, address, callback) {
-    db(function (err, connection) {
-        if (err) throw "Error on db: " + err;
-        connection.query('SELECT * FROM Competitions where address = ?', [address], function (error, results, fields) {
-            if (error) {
-                console.log('Error performing select Competitions by address query: ' + error);
-                callback({ code: 500 });
-            }
-            else {
-                if (results.length == 0)
-                    callback({ code: 404 });
-                else
-                    callback({ competition: results[0] });
-            }
-        });
-    });
-}
-
-exports.update = function (db, competition, id, callback) {
+exports.update = function (competition, id, callback) {
     AWS.config.update({
         accessKeyId: process.env.KEYID,
         secretAccessKey: process.env.SECRETKEYID
@@ -128,7 +119,7 @@ exports.update = function (db, competition, id, callback) {
             "init": { "S": competition.init },
             "end": { "S": competition.end },
             "prize": { "S": competition.prize },
-            "user": { "S": competition.user }
+            "user": { "S": competition.suser }
         }
     };
 
@@ -141,9 +132,8 @@ exports.update = function (db, competition, id, callback) {
     });
 }
 
-exports.delete = function (db, id, callback) {
+exports.delete = function (id, callback) {
     //Borrar cascada videos
-
     AWS.config.update({
         accessKeyId: process.env.KEYID,
         secretAccessKey: process.env.SECRETKEYID

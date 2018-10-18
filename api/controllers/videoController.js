@@ -3,21 +3,21 @@
 var Videos = require("../models/videos");
 
 exports.list = function(req, res) {
-  Videos.list(req.getConnection, req.params, function(store) {
+  Videos.list(req.params, function(store) {
     if (store.list) res.json(store.list);
     else res.sendStatus(store.code);
   });
 };
 
 exports.listById = function(req, res) {
-  Videos.listById(req.getConnection, req.params, function(store) {
+  Videos.listById(req.params, function(store) {
     if (store.list) res.json(store.list);
     else res.sendStatus(store.code);
   });
 };
 
 exports.create = function(req, res) {
-  Videos.create(req.getConnection, req.body, function(insertedId) {
+  Videos.create(req.body, function(insertedId) {
     if (insertedId) {
       res.status(201).send({ ...req.body, id: insertedId });
     } else {

@@ -13,9 +13,6 @@ exports.create = function (req, res) {
             res.status(201).send({});
         }
         else {
-            console.log("value")
-            console.log(value)
-            console.log("value")
             res.sendStatus(400);
         }
     });

@@ -3,14 +3,14 @@
 var Competitions = require("../models/competitions");
 
 exports.list = function (req, res) {
-    Competitions.list(req.getConnection, req.username, function (store) {
+    Competitions.list(req.username, function (store) {
         if (store.list) res.json(store.list);
         else res.sendStatus(store.code);
     });
 };
 
 exports.create = function (req, res) {
-    Competitions.create(req.getConnection, req.body, req.username, function (
+    Competitions.create(req.body, req.username, function (
         insertedId
     ) {
         if (!isNaN(insertedId)) {
@@ -29,16 +29,15 @@ exports.create = function (req, res) {
 };
 
 exports.find = function (req, res) {
-    Competitions.find(req.getConnection, req.params.competitionId, function (
-        store
-    ) {
+    Competitions.find(req.params.competitionId, function (store) {
+        console.log(store);
         if (store.competition) res.json(store.competition);
         else res.sendStatus(store.code);
     });
 };
 
 exports.findWithoutToken = function (req, res) {
-    Competitions.find(req.getConnection, req.params.competitionId, function (
+    Competitions.find(req.params.competitionId, function (
         store
     ) {
         if (store.competition) res.json(store.competition);
@@ -47,7 +46,7 @@ exports.findWithoutToken = function (req, res) {
 };
 
 exports.findByURL = function (req, res) {
-    Competitions.findByURL(req.getConnection, req.params.url, function (store) {
+    Competitions.findByURL(req.params.url, function (store) {
         if (store.competition) res.json(store.competition);
         else res.sendStatus(store.code);
     });
@@ -67,7 +66,7 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-    Competitions.delete(req.getConnection, req.params.competitionId, function (store) {
+    Competitions.delete(req.params.competitionId, function (store) {
         res.status(store.code).send({});
     });
 };
