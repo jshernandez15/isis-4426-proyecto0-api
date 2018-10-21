@@ -16,7 +16,7 @@ var producer = Producer.create({
     secretAccessKey: SESCREDENTIALS.secretAccessKey
 });
 
-exports.list = function(param, callback) {
+exports.list = function (param, callback) {
     //order by id_video desc
     AWS.config.update({
         accessKeyId: process.env.KEYID,
@@ -35,7 +35,7 @@ exports.list = function(param, callback) {
         ExpressionAttributeValues: { ":fk_id_competition": param.competitionId, ":state_video": param.state }
     };
 
-    docClient.scan(params, function(err, data) {
+    docClient.scan(params, function (err, data) {
         if (err) {
             console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
             callback({ code: 500 });
@@ -46,7 +46,7 @@ exports.list = function(param, callback) {
 
 };
 
-exports.listById = function(param, callback) {
+exports.listById = function (param, callback) {
     //order by id_video desc
     AWS.config.update({
         accessKeyId: process.env.KEYID,
@@ -63,7 +63,7 @@ exports.listById = function(param, callback) {
         ExpressionAttributeValues: { ":fk_id_competition": param.competitionId }
     };
 
-    docClient.scan(params, function(err, data) {
+    docClient.scan(params, function (err, data) {
         if (err) {
             console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
             callback({ code: 500 });
@@ -73,7 +73,7 @@ exports.listById = function(param, callback) {
     });
 };
 
-exports.create = function(video, callback) {
+exports.create = function (video, callback) {
     var d = new Date();
     var dateCreated =
         "" +
@@ -96,12 +96,13 @@ exports.create = function(video, callback) {
     AWS.config.region = "us-west-2"; //us-west-2 is Oregon
 
     var ddb = new AWS.DynamoDB();
+    var id = uuid.v1();
 
 
     var params = {
         TableName: 'videos',
         Item: {
-            "id": { "S": uuid.v1() },
+            "id": { "S": id },
             "name": { "S": video.name },
             "last_name": { "S": video.lastName },
             "email": { "S": video.email },
@@ -114,27 +115,33 @@ exports.create = function(video, callback) {
     };
 
     var sqsMessage = {
-        "id": params.Item.id,
+        "id": params.Item,
         "path_real": params.Item.path_real,
         "state_video": params.Item.state_video,
         "email": params.Item.email
     }
 
-    ddb.putItem(params, function(err, data) {
+    video.id = id;
+
+    ddb.putItem(params, function (err, data) {
         if (err) {
             console.log("Error", err);
             callback(false);
         } else {
-            producer.send([sqsMessage], function(err) {
-                if (err) console.log(err);
-            });
+            producer.send([
+                {
+                    id: uuid.v1(),
+                    body: JSON.stringify(video)
+                }], function (err) {
+                    if (err) console.log(err);
+                });
             console.log("Success", data);
             callback(data);
         }
     });
 };
 
-exports.find = function(id, callback) {
+exports.find = function (id, callback) {
 
     AWS.config.update({
         accessKeyId: process.env.KEYID,
@@ -153,7 +160,7 @@ exports.find = function(id, callback) {
 
     };
 
-    docClient.scan(params, function(err, data) {
+    docClient.scan(params, function (err, data) {
         if (err) {
             console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
             callback({ code: 500 });
@@ -164,7 +171,7 @@ exports.find = function(id, callback) {
 
 };
 
-exports.update = function(competition, id, callback) {
+exports.update = function (competition, id, callback) {
     var d = new Date();
     var dateCreated =
         "" +
@@ -204,7 +211,7 @@ exports.update = function(competition, id, callback) {
         }
     };
 
-    ddb.putItem(params, function(err, data) {
+    ddb.putItem(params, function (err, data) {
         if (err) {
             console.log("Error", err);
             callback({ code: 500 });
@@ -215,7 +222,7 @@ exports.update = function(competition, id, callback) {
     });
 };
 
-exports.delete = function(id, callback) {
+exports.delete = function (id, callback) {
     AWS.config.update({
         accessKeyId: process.env.KEYID,
         secretAccessKey: process.env.SECRETKEYID
@@ -231,7 +238,7 @@ exports.delete = function(id, callback) {
         }
     };
 
-    docClient.delete(params, function(err, data) {
+    docClient.delete(params, function (err, data) {
         if (err) {
             callback({ code: 500 });
         } else {
