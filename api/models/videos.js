@@ -85,17 +85,6 @@ exports.create = function (video, callback) {
 
   var ddb = new AWS.DynamoDB();
 
-  var newVideo = {};
-  newVideo.id = uuid.v1();
-  newVideo.name = video.name;
-  newVideo.last_name = video.lastName;
-  newVideo.email = video.email
-  newVideo.path_real = video.path;
-  newVideo.description = video.description;
-  newVideo.fk_id_competition = Number(video.idConcurso);
-  newVideo.path_convertido = "";
-  newVideo.state_video = video.stateVideo;
-
 
   var params = {
     TableName: 'videos',
@@ -176,17 +165,6 @@ exports.update = function (competition, id, callback) {
   AWS.config.region = "us-west-2"; //us-west-2 is Oregon
 
   var ddb = new AWS.DynamoDB();
-
-  var newVideo = {};
-  newVideo.id = uuid.v1();
-  newVideo.name = video.name;
-  newVideo.last_name = video.lastName;
-  newVideo.email = video.email
-  newVideo.path_real = video.path;
-  newVideo.description = video.description;
-  newVideo.fk_id_competition = Number(video.idConcurso);
-  newVideo.path_convertido = "";
-  newVideo.state_video = video.stateVideo;
 
 
   var params = {
