@@ -37,6 +37,10 @@ authRoutes(app);
 var videoRoutes = require('./api/routes/videoRoutes');
 videoRoutes(app);
 
+app.route("/health").get(function(req, res) {
+  res.sendStatus(200);
+});
+
 app.use(function (req, res) {
   res.status(404).send('Not found');
 });
