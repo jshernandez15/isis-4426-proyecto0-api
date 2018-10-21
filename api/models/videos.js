@@ -100,7 +100,7 @@ exports.create = function (video, callback) {
   var params = {
     TableName: 'videos',
     Item: {
-      "id": { "S": video.name },
+      "id": { "S": uuid.v1() },
       "name": { "S": video.name },
       "last_name": { "S": video.lastName },
       "email": { "S": video.email },
@@ -192,7 +192,7 @@ exports.update = function (competition, id, callback) {
   var params = {
     TableName: 'videos',
     Item: {
-      "id": { "S": video.name },
+      "id": { "S": uuid.v1() },
       "name": { "S": video.name },
       "last_name": { "S": video.lastName },
       "email": { "S": video.email },

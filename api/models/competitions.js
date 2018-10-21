@@ -134,6 +134,8 @@ exports.update = function (competition, id, callback) {
 
 exports.delete = function (id, callback) {
     //Borrar cascada videos
+    //order by created desc'
+    var videos = {};
     AWS.config.update({
         accessKeyId: process.env.KEYID,
         secretAccessKey: process.env.SECRETKEYID
@@ -141,20 +143,59 @@ exports.delete = function (id, callback) {
     AWS.config.region = "us-west-2"; //us-west-2 is Oregon
 
     var docClient = new AWS.DynamoDB.DocumentClient();
-
     var params = {
-        TableName: "competitions",
-        Key: {
-            "id": id
-        }
+        TableName: "videos",
+        FilterExpression: "#fk_id_competition = :fk_id_competition",
+        ExpressionAttributeNames: {
+            "#fk_id_competition": "fk_id_competition",
+        },
+        ExpressionAttributeValues: { ":fk_id_competition": id }
     };
 
-    docClient.delete(params, function (err, data) {
+    docClient.scan(params, function (err, data) {
         if (err) {
+            console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
             callback({ code: 500 });
         } else {
-            callback({ code: 200 });
+            data.Items.forEach(element => {
+                var paramsV = {
+                    TableName: "videos",
+                    Key: {
+                        "id": element.id
+                    }
+                };
+
+                docClient.delete(paramsV, function (err, data) {
+                    if (err) {
+                        console.log("primero");
+                        console.log(err);
+                        callback({ code: 500 });
+                    } else {
+                        //ok response
+                    }
+                });
+            });
+            var params = {
+                TableName: "competitions",
+                Key: {
+                    "id": id
+                }
+            };
+            docClient.delete(params, function (err, data) {
+                if (err) {
+                    console.log("segundo");
+                    console.log(err);
+                    callback({ code: 500 });
+                } else {
+                    callback({ code: 200 });
+                }
+            });
+
+            console.log(videos);
         }
     });
+
+    console.log(id);
+
 
 }
