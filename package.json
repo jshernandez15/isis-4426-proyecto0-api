@@ -17,6 +17,7 @@
     "formidable": "^1.2.1",
     "jsonwebtoken": "^8.3.0",
     "mysql": "^2.16.0",
+    "sqs-producer": "^1.6.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
