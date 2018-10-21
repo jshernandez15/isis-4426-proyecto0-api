@@ -63,8 +63,7 @@ exports.create = function(db, video, callback) {
     newVideo.fk_id_competition = video.idConcurso;
     newVideo.path_convertido = "";
     newVideo.state_video = video.stateVideo;
-    newVideo.created = dateCreated;
-
+    
     connection.query(
       "INSERT INTO videos SET ?",
       newVideo,
