@@ -49,9 +49,9 @@ exports.create = function(db, video, callback) {
       d.getDay() +
       " " +
       d.getHours() +
-      "-" +
+      ":" +
       d.getMinutes() +
-      "-" +
+      ":" +
       d.getSeconds();
     var newVideo = {};
     newVideo.name = video.name;
