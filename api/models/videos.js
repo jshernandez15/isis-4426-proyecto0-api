@@ -53,7 +53,6 @@ exports.create = function(db, video, callback) {
       d.getMinutes() +
       ":" +
       d.getSeconds();
-    console.log(dateCreated);
     var newVideo = {};
     newVideo.name = video.name;
     newVideo.last_name = video.lastName;
@@ -63,7 +62,7 @@ exports.create = function(db, video, callback) {
     newVideo.fk_id_competition = video.idConcurso;
     newVideo.path_convertido = "";
     newVideo.state_video = video.stateVideo;
-    
+
     connection.query(
       "INSERT INTO videos SET ?",
       newVideo,
