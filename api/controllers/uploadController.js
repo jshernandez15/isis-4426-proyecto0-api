@@ -19,12 +19,6 @@ module.exports = function upload(req, res) {
 
     form.on('file', (field, file) => {
         response = file;
-        var params = {
-            Bucket: "4426-grupo1-videos",
-            Key: field,
-            Body: "Valueeee or some data"
-        };
-
         fs.readFile(response.path, function (err, data) {
             if (err) { throw err; }
             params = { Bucket: "4426-grupo1-videos/original", Key: response.name, Body: data };
@@ -34,7 +28,7 @@ module.exports = function upload(req, res) {
                 }
                 console.log('success');
             });
-        });
+        }); 
 
     });
     form.on('end', () => {
