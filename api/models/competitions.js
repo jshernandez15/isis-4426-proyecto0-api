@@ -34,12 +34,32 @@ exports.list = function (user, callback) {
 
 
 exports.create = function (competition, user, callback) {
-    //validar tema URL
     AWS.config.update({
         accessKeyId: process.env.KEYID,
         secretAccessKey: process.env.SECRETKEYID
     });
     AWS.config.region = "us-west-2"; //us-west-2 is Oregon
+
+    var docClient = new AWS.DynamoDB.DocumentClient();
+    
+    var params = {
+        TableName: "competitions",
+        FilterExpression: "#address = :address",
+        ExpressionAttributeNames: {
+            "#address": "address"
+        },
+        ExpressionAttributeValues: { ":address": param.address }
+    };
+
+    docClient.scan(params, function (err, data) {
+        if (err) {
+            console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+            callback({ code: 500 });
+        } else {
+            if (data.Items.length > 0) callback({ code: 400 });
+        }
+    });
+
     var ddb = new AWS.DynamoDB();
     var d = new Date();
     var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
