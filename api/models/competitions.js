@@ -48,7 +48,7 @@ exports.create = function (competition, user, callback) {
         ExpressionAttributeNames: {
             "#address": "address"
         },
-        ExpressionAttributeValues: { ":address": param.address }
+        ExpressionAttributeValues: { ":address": competition.address }
     };
 
     docClient.scan(params, function (err, data) {
