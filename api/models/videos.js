@@ -86,6 +86,9 @@ exports.create = function(video, callback) {
   var ddb = new AWS.DynamoDB();
   var id = uuid.v1();
 
+  var d = new Date();
+  var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+
   var params = {
     TableName: "videos",
     Item: {
@@ -98,7 +101,7 @@ exports.create = function(video, callback) {
       fk_id_competition: { S: video.idConcurso.toString() },
       path_convertido: { S: "empty" },
       state_video: { S: video.stateVideo },
-      dateCreated: { S: new Date().toDateString() }
+      dateCreated: { S: dateCreated }
     }
   };
 
@@ -163,6 +166,9 @@ exports.update = function(competition, id, callback) {
 
   var ddb = new AWS.DynamoDB();
 
+  var d = new Date();
+  var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+
   var params = {
     TableName: "videos",
     Item: {
@@ -175,7 +181,7 @@ exports.update = function(competition, id, callback) {
       fk_id_competition: { N: video.idConcurso.toString() },
       path_convertido: { S: "empty" },
       state_video: { S: video.stateVideo },
-      dateCreated: { S: new Date().toString() }
+      dateCreated: { S: dateCreated }
     }
   };
 

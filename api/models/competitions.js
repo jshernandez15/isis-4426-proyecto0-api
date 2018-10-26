@@ -41,7 +41,7 @@ exports.create = function (competition, user, callback) {
     AWS.config.region = "us-west-2"; //us-west-2 is Oregon
 
     var docClient = new AWS.DynamoDB.DocumentClient();
-    
+
     var params = {
         TableName: "competitions",
         FilterExpression: "#address = :address",
@@ -62,7 +62,7 @@ exports.create = function (competition, user, callback) {
 
     var ddb = new AWS.DynamoDB();
     var d = new Date();
-    var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+    var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
 
     var params = {
         TableName: 'competitions',
@@ -126,7 +126,7 @@ exports.update = function (competition, id, callback) {
     AWS.config.region = "us-west-2"; //us-west-2 is Oregon
     var ddb = new AWS.DynamoDB();
     var d = new Date();
-    var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+    var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
 
     var params = {
         TableName: 'competitions',
