@@ -110,7 +110,8 @@ exports.create = function (video, callback) {
             "description": { "S": video.description },
             "fk_id_competition": { "S": video.idConcurso.toString() },
             "path_convertido": { "S": "empty" },
-            "state_video": { "S": video.stateVideo }
+            "state_video": { "S": video.stateVideo },
+            "dateCreated": { "S": dateCreated }
         }
     };
 
