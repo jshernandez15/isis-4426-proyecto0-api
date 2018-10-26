@@ -98,16 +98,10 @@ exports.create = function(video, callback) {
       fk_id_competition: { S: video.idConcurso.toString() },
       path_convertido: { S: "empty" },
       state_video: { S: video.stateVideo },
-      dateCreated: { S: new Date().toString() }
+      dateCreated: { S: new Date().toDateString() }
     }
   };
 
-  var sqsMessage = {
-    id: params.Item,
-    path_real: params.Item.path_real,
-    state_video: params.Item.state_video,
-    email: params.Item.email
-  };
 
   video.id = id;
 
