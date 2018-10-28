@@ -29,7 +29,7 @@ exports.create = function (db, competition, user, callback) {
                         if (err) throw "Error on db: " + err;
                         var d = new Date();
                         var dateCreated = "" + d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
-                        connection.query('INSERT INTO Competitions SET ?', { ...competition, user: user, created: dateCreated }, function (error, results, fields) {
+                        connection.query('INSERT INTO Competitions SET ?', { ...competition, user: user }, function (error, results, fields) {
                             if (error) {
                                 console.log('Error performing insert Competitions query: ' + error);
                                 callback(false);
